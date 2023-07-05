@@ -1,3 +1,4 @@
+import re
 import requests
 from bs4 import BeautifulSoup
 
@@ -9,10 +10,12 @@ response = requests.get(url)
 soup = BeautifulSoup(response.content, "html.parser")
 
 # Find the table containing the results
-results_table = soup.find("table", class_="dataList")
+results_table = soup.find("table", class_="table euromillions mobFormat")
 
 # Initialize a list to store the results
 results_list = []
+
+#print(results_table)
 
 # Iterate over each row in the table (excluding the header row)
 for row in results_table.find_all("tr")[1:]:
@@ -27,7 +30,7 @@ for row in results_table.find_all("tr")[1:]:
     results_list.append(result)
 
 # Save the results to a file
-filename = "euromillions_results.txt"
+filename = "euromillions_results.csv"
 with open(filename, "w", encoding="utf-8") as file:
     for result in results_list:
         file.write(f"Date: {result['Date']}\n")

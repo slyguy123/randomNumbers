@@ -37,6 +37,7 @@ for year in range(start_year, current_year + 1):
 
 # Save the results to a CSV file
 filename = "euromillions_results.csv"
+
 with open(filename, "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(["Date", "Numbers", "Lucky Stars"])
@@ -45,23 +46,48 @@ with open(filename, "w", newline="") as file:
 print(f"Results saved to {filename}")
 
 # Read the results from the CSV file
-csv_data = []
-with open(filename, "r") as file:
-    reader = csv.reader(file)
-    next(reader)  # Skip the header row
-    csv_data = list(reader)
+
+def combine_lists(filename):
+    with open(filename, 'r') as file:
+        reader = csv.reader(file)
+        rows = list(reader)
+
+    num_columns = len(rows[0])  # Assuming all rows have the same number of columns
+
+    ##### Need to filter out lucky numbers
+    for row_index in range(1, len(rows) - 1):
+        current_row = rows[row_index]
+        next_row = rows[row_index + 1]
+
+        column_index = 1
+        current_list = current_row[column_index].split(',')
+        next_list = next_row[column_index].split('\n')
+
+        combined_list = current_list + next_list
+        next_row[column_index] = ','.join(combined_list)        
+
+    return combined_list
+    #with open(new_filename, 'w', newline='') as file:
+    #    writer = csv.writer(file)
+    #    writer.writerows(rows)
+    #    writer.writerows(combined_list)
 
 # Flatten the ball numbers into a single list
-ball_numbers = [value.strip() for row in csv_data for value in row[1].split(",")]
+ball_numbers = combine_lists(filename)
 
+#######################
+
+# This is not counting correctly. It is just returning the first and last set
 # Calculate the top 6 most common ball numbers
-most_common = Counter(ball_numbers).most_common(1)
+most_common = Counter(ball_numbers).most_common(6)
 
+###### need to print least common numbers
 # Calculate the 6 least common ball numbers
-least_common = Counter(ball_numbers).most_common()[-1:]
+least_common = Counter(ball_numbers).most_common()[:-1]
 
 # Output the results
-print("Most common ball numbers:")
+print("Most common ball numbers:\n")
+#print(most_common)
 for number, count in most_common:
     print(f"{number}: {count}")
 

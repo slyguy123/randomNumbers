@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import random
 
 def generate_random_numbers(num, seed):

@@ -39,7 +39,7 @@ for year in range(start_year, current_year + 1):
     results.extend(scrape_results(year))
 
 # Save the results to a CSV file
-filename = "euromillions_results.csv"
+filename = "/home/slyguy/Downloads/euromillions_results.csv"
 
 with open(filename, "w", newline="") as file:
     writer = csv.writer(file)

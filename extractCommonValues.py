@@ -55,7 +55,7 @@ def getluckystars(lst, segment_size):
     return lucky_stars
 
 # set file name for csv file
-filename = "euromillions_results.csv"
+filename = "/home/slyguy/Downloads/euromillions_results.csv"
 
 # Sample the cells and flatten the ball numbers into a single list
 ball_numbers = combine_lists(filename)

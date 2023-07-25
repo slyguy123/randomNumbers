@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 
 #######################################################################
+#######################################################################
 ## Reads the cells of a csv file and outputs most common values found##
+#######################################################################
 #######################################################################
 
 import csv
 from collections import Counter
+
+import datetime
+import getpass
 
 def combine_lists(filename):
     # Read the results from the CSV file
@@ -54,6 +59,14 @@ def getluckystars(lst, segment_size):
         lucky_stars += gList[-2:]
     return lucky_stars
 
+def get_current_user():
+    current_user = getpass.getuser()
+    return current_user
+
+def get_current_time():
+    current_time = datetime.datetime.now()
+    return current_time
+
 # set file name for csv file
 filename = "/home/slyguy/Downloads/euromillions_results.csv"
 
@@ -78,6 +91,81 @@ most_common_stars = Counter(gLuckyStars).most_common(2)
 least_common_balls = Counter(gBallNumbers).most_common()[-5:]
 least_common_stars = Counter(gLuckyStars).most_common()[-2:]
 
+#########################################################################
+## Creating lists from numbers not found in most or least common lists ##
+#########################################################################
+
+def remove_matches(list1, list2):
+    new_list = [x for x in list1 if x not in list2]
+    return new_list
+
+def filterTuples(list, index):
+    filtered_list = [t[index] for t in list]
+    return filtered_list
+
+# isolate numbers that are not in the most or least common lists
+highLowBalls_list = filterTuples(most_common_balls, 0) +  filterTuples(least_common_balls, 0)
+remainingBalls = remove_matches(set(gBallNumbers), set(highLowBalls_list))
+
+gLuckyStars_list = filterTuples(most_common_stars, 0) +  filterTuples(least_common_stars, 0)
+remainingStars = remove_matches(set(gLuckyStars), set(gLuckyStars_list))
+
+
+#########################################################################
+#########################################################################
+##################### Randomly generate numbers #########################
+##################### from the remaining numbers ########################
+#########################################################################
+#########################################################################
+
+import random
+import datetime
+import getpass
+
+def get_current_time():
+    current_time = datetime.datetime.now()
+    return current_time
+
+def datetime_to_timestamp(dt):
+    epoch_time = datetime.datetime(1970, 1, 1)
+    time_difference = dt - epoch_time
+    timestamp = time_difference.total_seconds()
+    return timestamp
+
+def generate_random_numbers(num, seed):
+    random.seed(seed)
+    random_numbers = []
+    for _ in range(num):
+        random_number = random.randint(1, 50)
+        random_numbers.append(random_number)
+    return random_numbers
+
+def generate_additional_numbers(num, seed):
+    random.seed(seed)
+    additional_numbers = []
+    for _ in range(num):
+        additional_number = random.randint(1, 12)
+        additional_numbers.append(additional_number)
+    return additional_numbers
+
+# get current time and use it as a seed value
+current_time = get_current_time()
+current_time_as_float = float(datetime_to_timestamp(current_time))
+mySeed = current_time_as_float
+
+random.seed(mySeed)
+
+random_balls = random.sample(remainingBalls, 5)
+random_stars = random.sample(remainingStars, 2)
+
+print("Random balls to play: " + str(random_balls))
+print("Random stars to play: " + str(random_stars))
+
+###############################################################
+###############################################################
+################### OUT NUMBERS TO THE TERMINAL ###############
+###############################################################
+###############################################################
 
 # Output the results
 # Most common

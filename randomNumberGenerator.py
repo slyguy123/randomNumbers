@@ -1,6 +1,18 @@
 #!/usr/bin/env python3
 
 import random
+import datetime
+import getpass
+
+def get_current_time():
+    current_time = datetime.datetime.now()
+    return current_time
+
+def datetime_to_timestamp(dt):
+    epoch_time = datetime.datetime(1970, 1, 1)
+    time_difference = dt - epoch_time
+    timestamp = time_difference.total_seconds()
+    return timestamp
 
 def generate_random_numbers(num, seed):
     random.seed(seed)
@@ -18,8 +30,12 @@ def generate_additional_numbers(num, seed):
         additional_numbers.append(additional_number)
     return additional_numbers
 
+# get current time and use it as a seed value
+current_time = get_current_time()
+current_time_as_float = float(datetime_to_timestamp(current_time))
+mySeed = current_time_as_float
+
 # Example usage: Generate 10 random numbers from 1 to 50 and 5 additional numbers from 1 to 12 with seed 123
-mySeed = 12413.981267321
 random_numbers = generate_random_numbers(5, mySeed)
 additional_numbers = generate_additional_numbers(2, mySeed)
 

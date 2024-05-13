@@ -6,6 +6,8 @@
 ##########################################################################
 
 
+import os
+import datetime
 import requests
 from bs4 import BeautifulSoup
 import csv
@@ -32,14 +34,20 @@ def scrape_results(year):
 
 # Scrape the EuroMillions results for each year from 2016 to the present
 start_year = 2016
-current_year = 2023
+current_year = datetime.datetime.now().year
 results = []
 
 for year in range(start_year, current_year + 1):
     results.extend(scrape_results(year))
 
 # Save the results to a CSV file
-filename = "/home/slyguy/Downloads/euromillions_results.csv"
+curDir = os.getcwd()
+
+#filename = "/home/slyguy/Downloads/euromillions_results.csv"
+fName = "euromillions_results.csv"
+filename = os.path.join(curDir, fName)
+
+
 
 with open(filename, "w", newline="") as file:
     writer = csv.writer(file)

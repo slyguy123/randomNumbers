@@ -9,6 +9,7 @@
 import csv
 from collections import Counter
 
+import os
 import datetime
 import getpass
 
@@ -68,7 +69,10 @@ def get_current_time():
     return current_time
 
 # set file name for csv file
-filename = "/home/slyguy/Downloads/euromillions_results.csv"
+# filename = "/home/slyguy/Downloads/euromillions_results.csv"
+curDir = os.getcwd()
+fName = "euromillions_results.csv"
+filename = os.path.join(curDir, fName)
 
 # Sample the cells and flatten the ball numbers into a single list
 ball_numbers = combine_lists(filename)

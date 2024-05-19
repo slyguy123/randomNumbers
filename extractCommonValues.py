@@ -13,7 +13,7 @@ import os
 import datetime
 import getpass
 
-def combine_lists(filename):
+def combine_lists(filename, colNum):
     # Read the results from the CSV file
     with open(filename, 'r') as file:
         reader = csv.reader(file)
@@ -26,7 +26,8 @@ def combine_lists(filename):
             current_row = rows[row_index]
             next_row = rows[row_index + 1]
 
-            column_index = 1
+            # column 1 is front numbers, column 2 is lucky stars
+            column_index = colNum
             
             current_list = current_row[column_index].split('\n')
             next_list = next_row[column_index].split('\n')
@@ -49,9 +50,11 @@ def getballnumbers(lst, segment_size):
     ball_numbers_list = []
     for segs in range(0,len(segments)):
         gList = segments[segs] 
-        ball_numbers_list += gList[:-2]
+        #ball_numbers_list += gList[:-2]
+        ball_numbers_list += gList
     return ball_numbers_list
 
+# not needed
 def getluckystars(lst, segment_size):
     segments = [lst[i:i+segment_size] for i in range(0, len(lst), segment_size)]
     lucky_stars = []
@@ -75,15 +78,18 @@ fName = "euromillions_results.csv"
 filename = os.path.join(curDir, fName)
 
 # Sample the cells and flatten the ball numbers into a single list
-ball_numbers = combine_lists(filename)
+ball_numbers = combine_lists(filename, 1)
+lucky_numbers = combine_lists(filename, 2)
 
 # clean up list and remove spaces and strange entries
 corrected_list = clean_list(ball_numbers, ",")
+corrected_lucky_list = clean_list(lucky_numbers, ",")
 #print(corrected_list)
 
 # split into numbers and stars
-gBallNumbers = getballnumbers(corrected_list, 7)
-gLuckyStars = getluckystars(corrected_list, 7)
+gBallNumbers = getballnumbers(corrected_list, 5)
+#gLuckyStars = getluckystars(corrected_lucky_list, 7)
+gLuckyStars = getballnumbers(corrected_lucky_list, 2)
 #print(gBallNumbers)
 #print(gLuckyStars)
 

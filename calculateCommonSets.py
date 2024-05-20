@@ -31,7 +31,7 @@ def count_triplets(number_sets, set_length):
         triplet_counter.update(triplets)
     return triplet_counter
 
-def find_top_triplets(triplet_counter, top_n=3):
+def find_top_triplets(triplet_counter, top_n=6):
     # Get the top N triplets with the highest counts
     return triplet_counter.most_common(top_n)
 
@@ -44,7 +44,8 @@ if __name__ == "__main__":
     number_sets = read_number_sets(csv_file, 1)
     lucky_sets = read_number_sets(csv_file, 2)
     
-    triplet_counter = count_triplets(number_sets, 4)
+    # define length of sets to search
+    triplet_counter = count_triplets(number_sets, 2)
     lucky_counter = count_triplets(lucky_sets, 2)
 
     top_triplets = find_top_triplets(triplet_counter)
@@ -52,7 +53,7 @@ if __name__ == "__main__":
 
     print("Top 3 Triplets that appear most often:")
     for triplet, count in top_triplets:
-        print(f"Triplet: {triplet}, Count: {count}")
+        print(f"Core Numbers: {triplet}, Count: {count}")
 
     for lucky, count in lucky_triplets:
         print(f"lucky: {lucky}, Count: {count}")

@@ -57,3 +57,5 @@ if __name__ == "__main__":
 
     for lucky, count in lucky_triplets:
         print(f"lucky: {lucky}, Count: {count}")
+
+# adding to test

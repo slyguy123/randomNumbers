@@ -1,3 +1,4 @@
+import os 
 import csv
 from collections import Counter
 import matplotlib.pyplot as plt
@@ -36,11 +37,10 @@ def visualize_probabilities(probabilities):
 
 
 if __name__ == "__main__":
+    # set file name for csv file
     curDir = os.getcwd()
-    #filename = "/home/slyguy/Downloads/euromillions_results.csv"
     fName = "euromillions_results.csv"
-    filename = os.path.join(curDir, fName)
-    csv_file = 'lottery_data.csv'  # Replace with the path to your CSV file
+    csv_file = os.path.join(curDir, fName)
     probabilities = calculate_probabilities(csv_file)
     print("Probabilities:", probabilities)
     visualize_probabilities(probabilities)

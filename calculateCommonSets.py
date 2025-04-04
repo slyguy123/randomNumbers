@@ -69,7 +69,7 @@ if __name__ == "__main__":
     lucky_sets = read_number_sets(csv_file, 2)
 
     # Define length of sets to search
-    combination_counter = count_combinations(number_sets, 4)
+    combination_counter = count_combinations(number_sets, 3)
     lucky_counter = count_combinations(lucky_sets, 2)
 
     # Find top occurring combinations

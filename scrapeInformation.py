@@ -58,8 +58,8 @@ def check_and_remove_file(file_path):
     else:
         print(f"# First time running. File {file_path} does not exist. #")
 
-# Scrape the EuroMillions results for each year from 2016 to the present
-start_year = 2016
+# Scrape the EuroMillions results for each year from start year to the present
+start_year = 2024
 current_year = datetime.datetime.now().year
 results = []
 

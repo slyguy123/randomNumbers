@@ -69,7 +69,7 @@ if __name__ == "__main__":
     lucky_sets = read_number_sets(csv_file, 2)
 
     # Define length of sets to search
-    combination_counter = count_combinations(number_sets, 3)
+    combination_counter = count_combinations(number_sets, 2)
     lucky_counter = count_combinations(lucky_sets, 2)
 
     # Find top occurring combinations
@@ -100,3 +100,5 @@ if __name__ == "__main__":
     print(f"Lucky Numbers: {random_lucky_numbers}")
 
     print(f" --- CSV file: {csv_file} ---")
+
+    print(" ----- USE COMMON VALUES RATHER -----")

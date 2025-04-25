@@ -94,7 +94,8 @@ gLuckyStars = getballnumbers(corrected_lucky_list, 2)
 #print(gLuckyStars)
 
 # Calculate the top 6 most common ball numbers
-most_common_balls = Counter(gBallNumbers).most_common(5)
+#most_common_balls = Counter(gBallNumbers).most_common(5)
+most_common_balls = Counter(gBallNumbers).most_common(25)
 most_common_stars = Counter(gLuckyStars).most_common(2)
 
 # Calculate the 6 least common ball numbers
@@ -114,10 +115,13 @@ def filterTuples(list, index):
     return filtered_list
 
 # isolate numbers that are not in the most or least common lists
-highLowBalls_list = filterTuples(most_common_balls, 0) +  filterTuples(least_common_balls, 0)
+#highLowBalls_list = filterTuples(most_common_balls, 0) +  filterTuples(least_common_balls, 0)
+highLowBalls_list = filterTuples(least_common_balls, 0)
+highBalls_list = filterTuples(most_common_balls, 0)
 remainingBalls = remove_matches(set(gBallNumbers), set(highLowBalls_list))
 
-gLuckyStars_list = filterTuples(most_common_stars, 0) +  filterTuples(least_common_stars, 0)
+#gLuckyStars_list = filterTuples(most_common_stars, 0) +  filterTuples(least_common_stars, 0)
+gLuckyStars_list = filterTuples(least_common_stars, 0)
 remainingStars = remove_matches(set(gLuckyStars), set(gLuckyStars_list))
 
 
@@ -166,10 +170,13 @@ mySeed = current_time_as_float
 random.seed(mySeed)
 
 random_balls = random.sample(remainingBalls, 5)
+random_high_balls = random.sample(highBalls_list,5)
 random_stars = random.sample(remainingStars, 2)
 
-print("Random balls to play: " + str(random_balls))
-print("Random stars to play: " + str(random_stars))
+print("Random remaining balls to play: " + str(random_balls))
+print("Random remaining stars to play: " + str(random_stars))
+
+print("Random most common Balls to play: " + str(random_high_balls))
 
 ###############################################################
 ###############################################################
@@ -180,6 +187,8 @@ print("Random stars to play: " + str(random_stars))
 # Output the results
 # Most common
 print("Most common ball numbers:")
+# limit print 
+
 for number, count in most_common_balls:
     print(f"{number}: {count}")
 print("Lucky stars:")
@@ -195,3 +204,4 @@ for number, count in least_common_stars:
     print(f"{number}: {count}")
 
 print("\n Sucess!!")
+

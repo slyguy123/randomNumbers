@@ -124,14 +124,21 @@ def combine_lists(filename, colNum):
         combined_list = current_list + next_list
         next_row[colNum] = ','.join(combined_list)
 
-    return combined_list
+    #return combined_list
+    # Clean list
+    new_combined_list = []
+    for item in combined_list:
+        cur_list = item.split(str(","))
+        new_combined_list += cur_list
+    return new_combined_list
 
-def clean_list(mylist, separator):
-    new_list = []
-    for item in mylist:
-        cur_list = item.split(str(separator))
-        new_list += cur_list
-    return new_list
+# merged clean_list into combined_lists, might not be needed
+#def clean_list(mylist, separator):
+#    new_list = []
+#    for item in mylist:
+#        cur_list = item.split(str(separator))
+#        new_list += cur_list
+#    return new_list
 
 def getballnumbers(lst, segment_size):
     segments = [lst[i:i+segment_size] for i in range(0, len(lst), segment_size)]
@@ -187,10 +194,12 @@ def prepare_data():
     else:
         ball_numbers = combine_lists(filename, 1)
         lucky_numbers = combine_lists(filename, 2)
-        corrected_list = clean_list(ball_numbers, ",")
-        corrected_lucky_list = clean_list(lucky_numbers, ",")
-        gBallNumbers = getballnumbers(corrected_list, 5)
-        gLuckyStars = getballnumbers(corrected_lucky_list, 2)
+        #corrected_list = clean_list(ball_numbers, ",")
+        #corrected_lucky_list = clean_list(lucky_numbers, ",")
+        #gBallNumbers = getballnumbers(corrected_list, 5)
+        #gLuckyStars = getballnumbers(corrected_lucky_list, 2)
+        gBallNumbers = getballnumbers(ball_numbers, 5)
+        gLuckyStars = getballnumbers(lucky_numbers, 2)
 
     ball_counts = Counter(gBallNumbers)
     star_counts = Counter(gLuckyStars)

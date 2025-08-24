@@ -224,7 +224,7 @@ def prepare_data():
     }
 
 ##############################
-# --- Number Generation --- #
+# --- Number Generation --- ##
 ##############################
 
 def generate_custom_draw(common_power=1.5, rare_power=0.5, core_count=5, star_count=2):

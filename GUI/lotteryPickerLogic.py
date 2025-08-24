@@ -98,7 +98,7 @@ def filter_non_rollover_numbers(filename):
                 continue
 
             payouts_col = row[3].strip().lower()
-            if "rollover" not in payouts_col:
+            if "rolled" not in payouts_col:
                 balls = [n.strip() for n in row[1].split(",") if n.strip()]
                 stars = [n.strip() for n in row[2].split(",") if n.strip()]
                 

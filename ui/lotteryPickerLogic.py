@@ -47,7 +47,8 @@ def scrape_results(year):
         frontNums = current_list[0:5]
         lucky_stars = current_list[5:]
         payouts = [cells[-1].text.strip()]
-        result = {"Date": date, "Numbers": frontNums, "Lucky Stars": lucky_stars, "Payouts": payouts}
+        rolled = "rolled" in payouts[0].lower()
+        result = {"Date": date, "Numbers": frontNums, "Lucky Stars": lucky_stars, "Payouts": payouts, "Rolled": (f"{rolled}")}
         results_list.append(result)
 
     return results_list
@@ -64,13 +65,14 @@ def scrape_and_save(start_year=2020):
 
     with open(filename, "w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(["Date", "Numbers", "Lucky Stars", "Payouts"])
+        writer.writerow(["Date", "Numbers", "Lucky Stars", "Payouts", "Rolled"])
         for result in all_results:
             writer.writerow([
                 result["Date"],
                 ", ".join(result["Numbers"]),
                 ", ".join(result["Lucky Stars"]),
-                ", ".join(result["Payouts"])
+                ", ".join(result["Payouts"]),
+                result["Rolled"]
             ])
     print(f"## New results saved to {filename} ##")
 
@@ -94,11 +96,11 @@ def filter_non_rollover_numbers(filename):
         header = next(reader)  # skip header
 
         for row in reader:
-            if len(row) < 4:
+            if len(row) < 5:
                 continue
 
-            payouts_col = row[3].strip().lower()
-            if "rolled" not in payouts_col:
+            payouts_col = row[4].strip().lower()
+            if "False" in payouts_col:
                 balls = [n.strip() for n in row[1].split(",") if n.strip()]
                 stars = [n.strip() for n in row[2].split(",") if n.strip()]
                 
@@ -269,7 +271,8 @@ def generate_custom_draw(common_power=1.5, rare_power=0.5, core_count=5, star_co
 ##############################
 
 def main():
-    scrape_and_save(start_year=2020)
+    #print(f"{scrape_results(2026)}")
+    #scrape_and_save(start_year=2020)
     final_balls, final_stars = generate_custom_draw()
     data = prepare_data()
 
@@ -277,21 +280,23 @@ def main():
     print(f"Core Numbers: {final_balls}")
     print(f"Lucky Stars:  {final_stars}")
 
-    print("\nMost Common Ball Numbers:")
-    for number, count in data["most_common_balls"]:
-        print(f"{number}: {count}")
+    #print("\nMost Common Ball Numbers:")
+    #for number, count in data["most_common_balls"]:
+    #    print(f"{number}: {count}")
 
-    print("\nMost Common Lucky Stars:")
-    for number, count in data["most_common_stars"]:
-        print(f"{number}: {count}")
+    #print("\nMost Common Lucky Stars:")
+    #for number, count in data["most_common_stars"]:
+    #      print(f"{number}: {count}")
 
-    print("\nLeast Common Ball Numbers:")
-    for number, count in data["least_common_balls"]:
-        print(f"{number}: {count}")
+    #print("\nLeast Common Ball Numbers:")
+    #for number, count in data["least_common_balls"]:
+    #    print(f"{number}: {count}")
 
-    print("\nLeast Common Lucky Stars:")
-    for number, count in data["least_common_stars"]:
-        print(f"{number}: {count}")
+    #print("\nLeast Common Lucky Stars:")
+    #for number, count in data["least_common_stars"]:
+    #    print(f"{number}: {count}")
 
 if __name__ == "__main__":
     main()
+
+

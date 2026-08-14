@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
-import lotteryPickerLogic
+import ui.lotteryPickerLogic as lotteryPickerLogic
 
 def update_filter_state():
     """Toggle rollover filtering in the logic module."""

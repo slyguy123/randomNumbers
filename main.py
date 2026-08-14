@@ -6,14 +6,30 @@
 #######################################################################
 
 import os
-import dependencies.validateDependencies as dep
+import subprocess
+import sys
 
-depPath = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pip", "buildDependencies.py")
 
+modules = ["tkinter","numpy", "pandas", "matplotlib", "requests", "bs4"]  # Add your modules here
+sucess = {}
+for module in modules:
+    try:
+        test = subprocess.run([sys.executable, "-c", f"import {module}"], check=True)
+        if test.returncode == 0:
+            #print(f"{module} is installed.")
+            sucess[module] = True
+    except subprocess.CalledProcessError:
+        #print(f"Please install | {module:^20}|")
+        sucess[module] = False
+valid = all(sucess.values())
+for key, value in sucess.items():
+    if not value:
+        print(f"Please install the missing module: {key}")
+        sys.exit(1)
+    else:
+        print(f"{key} is installed.")
 
-try:
-    import ui.lotteryPickerGUI as lotPick
-    lotPick()
-except:
-    print(f"Running dependencies validation:\npython3 {depPath}")
-    dep.missing_dependency()
+if(valid):
+    print(f"All required modules are installed. Proceeding with the program...")
+    import ui.lotteryPickerGUI as lotpic
+    lotpic.run_gui()

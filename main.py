@@ -26,7 +26,6 @@ for key, value in sucess.items():
     if not value:
         print(f"Please install the missing module: {key}")
         sys.exit(1)
-    else:
         print(f"{key} is installed.")
 
 if(valid):

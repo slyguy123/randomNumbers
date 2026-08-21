@@ -2,15 +2,16 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import ui.lotteryPickerLogic as lotteryPickerLogic
 
-def update_filter_state():
+
+def update_filter_state(filename=lotteryPickerLogic.FILENAME):
     """Toggle rollover filtering in the logic module."""
     lotteryPickerLogic.FILTER_ROLLOVERS = filter_var.get() == 1
-    generate_numbers()
+    generate_numbers(filename)
 
-def update_top_10_display():
+def update_top_10_display(filename=lotteryPickerLogic.FILENAME):
     """Refreshes the top 10 most common numbers display."""
     try:
-        data = lotteryPickerLogic.prepare_data()
+        data = lotteryPickerLogic.prepare_data(filename)
         top_balls = data["ball_counts"].most_common(10)
         display_text = "Top 10 Most Common Numbers:\n"
         for num, count in top_balls:
@@ -19,7 +20,7 @@ def update_top_10_display():
     except Exception as e:
         top10_var.set(f"Error loading top 10:\n{str(e)}")
 
-def generate_numbers():
+def generate_numbers(filename=lotteryPickerLogic.FILENAME):
     """Generate weighted numbers and update UI."""
     try:
         common_weight = float(common_scale.get())
@@ -28,6 +29,7 @@ def generate_numbers():
         star_count_val = int(star_count.get())
 
         final_balls, final_stars = lotteryPickerLogic.generate_custom_draw(
+            filename,
             common_power=common_weight,
             rare_power=rare_weight,
             core_count=ball_count,
@@ -42,9 +44,9 @@ def scrape_and_refresh():
     """Scrape fresh results and regenerate CSV."""
     try:
         start_year_val = int(start_year_scale.get())
-        lotteryPickerLogic.scrape_and_save(start_year=start_year_val)
+        filename = lotteryPickerLogic.scrape_and_save(start_year=start_year_val)
         messagebox.showinfo("Scrape Complete", f"Data scraped from {start_year_val} to current year.")
-        generate_numbers()
+        generate_numbers(filename)
     except Exception as e:
         messagebox.showerror("Error", f"Scraping failed:\n{str(e)}")
 

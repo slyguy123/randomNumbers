@@ -16,7 +16,7 @@ from bs4 import BeautifulSoup
 # === FILE PATH ===
 curDir = os.getcwd()
 fName = "euromillions_results.csv"
-filename = os.path.join(curDir, fName)
+FILENAME = os.path.join(curDir, fName)
 
 # === GLOBAL TOGGLE FOR ROLLOVER FILTER ===
 FILTER_ROLLOVERS = False  # Set True to only use draws that are NOT rollovers
@@ -53,9 +53,10 @@ def scrape_results(year):
 
     return results_list
 
-def scrape_and_save(start_year=2020):
+def scrape_and_save(start_year=2020, filename=None):
     current_year = datetime.datetime.now().year
-
+    if filename is None:
+        filename = FILENAME
     check_and_remove_file(filename)
 
     all_results = []
@@ -75,16 +76,20 @@ def scrape_and_save(start_year=2020):
                 result["Rolled"]
             ])
     print(f"## New results saved to {filename} ##")
+    return filename
 
 ##############################
 # --- Filter Functions ---  #
 ##############################
 
-def filter_non_rollover_numbers(filename):
+def filter_non_rollover_numbers(filename=None):
     """
     Reads the CSV file and returns only numbers from rows
     where the 'Payouts' column does NOT contain 'Rollover'.
     """
+    if filename is None:
+        filename = FILENAME
+    
     if not os.path.exists(filename):
         raise FileNotFoundError(f"Data file {filename} not found. Please scrape first.")
 
@@ -96,24 +101,30 @@ def filter_non_rollover_numbers(filename):
         header = next(reader)  # skip header
 
         for row in reader:
-            if len(row) < 5:
-                continue
+            if len(row) < 4:
 
-            payouts_col = row[4].strip().lower()
+                continue
+                
+
+            payouts_col = row[4]#.strip().lower()
+            #print(payouts_col)
             if "False" in payouts_col:
                 balls = [n.strip() for n in row[1].split(",") if n.strip()]
                 stars = [n.strip() for n in row[2].split(",") if n.strip()]
                 
                 filtered_balls.extend(balls)
                 filtered_stars.extend(stars)
-
+    
     return filtered_balls, filtered_stars
 
 ##############################
 # --- Helper Functions ---  #
 ##############################
 
-def combine_lists(filename, colNum):
+def combine_lists(colNum, filename=None):
+    if filename is None:
+        filename = FILENAME
+
     with open(filename, 'r') as file:
         reader = csv.reader(file)
         rows = list(reader)
@@ -186,7 +197,10 @@ def replace_duplicates(numbers, full_pool, counter):
 # --- Core Data Prep ---    #
 ##############################
 
-def prepare_data():
+def prepare_data(filename=None):
+    if filename is None:
+        filename = FILENAME
+
     if not os.path.exists(filename):
         raise FileNotFoundError(f"Data file {filename} not found. Please run scraping first.")
 
@@ -194,13 +208,14 @@ def prepare_data():
         print("Applying rollover filter...")
         gBallNumbers, gLuckyStars = filter_non_rollover_numbers(filename)
     else:
-        ball_numbers = combine_lists(filename, 1)
-        lucky_numbers = combine_lists(filename, 2)
+        ball_numbers = combine_lists(1, filename)
+        lucky_numbers = combine_lists(2, filename)
         #corrected_list = clean_list(ball_numbers, ",")
         #corrected_lucky_list = clean_list(lucky_numbers, ",")
         #gBallNumbers = getballnumbers(corrected_list, 5)
         #gLuckyStars = getballnumbers(corrected_lucky_list, 2)
         gBallNumbers = getballnumbers(ball_numbers, 5)
+        print(f"gBallNumbers: {gBallNumbers}")
         gLuckyStars = getballnumbers(lucky_numbers, 2)
 
     ball_counts = Counter(gBallNumbers)
@@ -238,8 +253,10 @@ def prepare_data():
 # --- Number Generation --- ##
 ##############################
 
-def generate_custom_draw(common_power=1.5, rare_power=0.5, core_count=5, star_count=2):
-    data = prepare_data()
+def generate_custom_draw(filename=None, common_power=1.5, rare_power=0.5, core_count=5, star_count=2):
+    if filename is None:
+        filename = FILENAME
+    data = prepare_data(filename)
     ball_counts = data["ball_counts"]
     star_counts = data["star_counts"]
 
@@ -273,12 +290,19 @@ def generate_custom_draw(common_power=1.5, rare_power=0.5, core_count=5, star_co
 def main():
     #print(f"{scrape_results(2026)}")
     #scrape_and_save(start_year=2020)
-    final_balls, final_stars = generate_custom_draw()
-    data = prepare_data()
+    filename = FILENAME
+    final_balls, final_stars = generate_custom_draw(filename)
+    #data = prepare_data(filename)
+    #filename = "/home/slyguy/gitRepos/randomNumbers/euromillions_results.csv"
 
-    print("\nGenerated Numbers (Weighted & Deduplicated):")
-    print(f"Core Numbers: {final_balls}")
-    print(f"Lucky Stars:  {final_stars}")
+    #print("\nGenerated Numbers (Weighted & Deduplicated):")
+    #print(f"Core Numbers: {final_balls}")
+    #print(f"Lucky Stars:  {final_stars}")
+
+    #filtered_balls, filtered_stars = filter_non_rollover_numbers(filename)
+    #print("\nFiltered Non-Rollover Numbers:")
+    #print(f"Core Numbers: {filtered_balls}")
+    #print(f"Lucky Stars:  {filtered_stars}")
 
     #print("\nMost Common Ball Numbers:")
     #for number, count in data["most_common_balls"]:

@@ -13,7 +13,7 @@ from collections import Counter
 import requests
 from bs4 import BeautifulSoup
 
-# === FILE PATH ===
+# === FILE PATH GLOBAL ===
 curDir = os.getcwd()
 fName = "euromillions_results.csv"
 FILENAME = os.path.join(curDir, fName)

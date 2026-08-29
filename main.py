@@ -31,4 +31,4 @@ for key, value in sucess.items():
 if(valid):
     print(f"All required modules are installed. Proceeding with the program...")
     import ui.lotteryPickerGUI as lotpic
-    lotpic.run_gui()
+    #lotpic.run_gui()
